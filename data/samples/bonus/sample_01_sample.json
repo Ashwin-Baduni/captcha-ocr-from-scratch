@@ -1,0 +1,27 @@
+{
+  "difficulty_score": 0.9100000000000001,
+  "font_path": "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+  "font_size": 35,
+  "text_position": [
+    30,
+    9
+  ],
+  "original_text": "sample",
+  "display_text": "ElpmAS",
+  "condition": "red",
+  "condition_rule": "reverse",
+  "condition_description": "Text rendered in reverse, but label stays normal",
+  "background_color": [
+    255,
+    182,
+    193
+  ],
+  "effects_applied": [
+    "condition_red"
+  ],
+  "capitalization_pattern": "Mixed",
+  "transformation_applied": "Reversed (red background): 'sample' -> 'ElpmAS'",
+  "image_hash": "4ac32d993082f0cb39095f97af61283d",
+  "contrast_ratio": 45.83242912676266,
+  "noise_level": 559.8116748971194
+}

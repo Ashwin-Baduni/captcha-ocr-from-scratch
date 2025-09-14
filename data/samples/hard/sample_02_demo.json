@@ -1,0 +1,20 @@
+{
+  "difficulty_score": 0.79,
+  "font_path": "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+  "font_size": 31,
+  "text_position": [
+    61,
+    19
+  ],
+  "rendered_text": "Demo",
+  "original_text": "demo",
+  "effects_applied": [
+    "sine_a2.8_f0.02",
+    "perspective",
+    "speckle_noise"
+  ],
+  "capitalization_pattern": "Title",
+  "image_hash": "e87accfe7a7dfcc4591df82967ca1585",
+  "contrast_ratio": 51.141506952116046,
+  "noise_level": 604.3115637860083
+}

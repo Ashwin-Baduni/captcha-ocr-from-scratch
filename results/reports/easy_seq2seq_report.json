@@ -1,0 +1,14 @@
+{
+  "model_type": "seq2seq",
+  "dataset_type": "easy",
+  "num_epochs": 100,
+  "best_val_cer": 0.04075,
+  "final_metrics": {
+    "train_cer": 0.35026091269841275,
+    "val_cer": 0.1111706349206349,
+    "train_wer": 0.42375,
+    "val_wer": 0.095,
+    "train_exact": 0.57625,
+    "val_exact": 0.905
+  }
+}

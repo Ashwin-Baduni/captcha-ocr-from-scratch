@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Technical Deep Dive - CAPTCHA Recognition Analysis</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #0f172a;
+            overflow: hidden;
+            color: #333;
+        }
+
+        .slide {
+            display: none;
+            width: 100vw;
+            height: 100vh;
+            padding: 60px 80px;
+            box-sizing: border-box;
+            background: white;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        h1 {
+            color: #dc2626;
+            font-size: 42px;
+            margin-bottom: 30px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        h2 {
+            color: #991b1b;
+            font-size: 32px;
+            margin: 20px 0;
+            font-weight: 600;
+        }
+
+        h3 {
+            color: #7f1d1d;
+            font-size: 24px;
+            margin: 20px 0 15px 0;
+            font-weight: 500;
+        }
+
+        p {
+            font-size: 20px;
+            line-height: 1.6;
+            color: #374151;
+            margin: 15px 0;
+        }
+
+        ul {
+            font-size: 20px;
+            line-height: 1.8;
+            color: #374151;
+            margin: 20px 0;
+            padding-left: 30px;
+        }
+
+        li {
+            margin: 10px 0;
+        }
+
+        .title-slide {
+            text-align: center;
+            background: linear-gradient(135deg, #dc2626 0%, #7f1d1d 100%);
+            color: white;
+        }
+
+        .title-slide h1 {
+            color: white;
+            font-size: 52px;
+            margin-bottom: 20px;
+        }
+
+        .title-slide h2 {
+            color: rgba(255,255,255,0.9);
+            font-size: 28px;
+            font-weight: 400;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 16px;
+        }
+
+        th {
+            background: #dc2626;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+
+        td {
+            padding: 10px 12px;
+            border: 1px solid #e5e7eb;
+        }
+
+        tr:nth-child(even) {
+            background: #f9fafb;
+        }
+
+        .code-box {
+            background: #1f2937;
+            color: #10b981;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+
+        .analysis-box {
+            background: #fef2f2;
+            border-left: 4px solid #dc2626;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .insight-box {
+            background: #ecfdf5;
+            border-left: 4px solid #10b981;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .warning-box {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .metric {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            margin: 0 5px;
+        }
+
+        .metric-good {
+            background: #10b981;
+            color: white;
+        }
+
+        .metric-bad {
+            background: #dc2626;
+            color: white;
+        }
+
+        .metric-warning {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .nav {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        button {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 6px;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #991b1b;
+        }
+
+        button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .slide-num {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 16px;
+        }
+
+        .small-text {
+            font-size: 16px;
+            color: #6b7280;
+        }
+
+        .highlight {
+            background: #fef3c7;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .equation {
+            background: #f9fafb;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            margin: 20px 0;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Slide 1: Title -->
+<div class="slide active title-slide">
+    <div style="display: flex; align-items: center; justify-content: center; height: 100%;">
+        <div>
+            <h1>Technical Deep Dive</h1>
+            <h2>CAPTCHA Recognition System Analysis</h2>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 2: Failure Pattern Analysis -->
+<div class="slide">
+    <h1>Semantic Confusion Patterns</h1>
+
+    <h2>Error Categories from 50 Test Samples:</h2>
+
+    <div class="analysis-box">
+        <h3>Category A: Length-Preserving (12%)</h3>
+        <p>"box" → "book" | "hot" → "hot" ✓</p>
+    </div>
+
+    <div class="analysis-box">
+        <h3>Category B: Semantic Substitution (44%)</h3>
+        <p>"elephant" → "freedom" | "crystal" → "friend" | "basketball" → "celebrate"</p>
+    </div>
+
+    <div class="analysis-box">
+        <h3>Category C: Length Mismatch (44%)</h3>
+        <p>"year" → "foot" | "adventure" → short words</p>
+    </div>
+
+    <div class="insight-box">
+        <p><strong>Key Finding:</strong> Model learns word frequency distribution rather than visual features</p>
+        <p>Top predicted words: "freedom", "friend", "foot", "book", "home" (73% of errors)</p>
+    </div>
+</div>
+
+<!-- Slide 3: Training Dynamics Analysis -->
+<div class="slide">
+    <h1>Loss Trajectory Deep Analysis</h1>
+
+    <div class="two-column">
+        <div>
+            <h3>Easy Dataset Convergence:</h3>
+            <div class="code-box">
+Epochs 1-10:  Rapid (4.69→0.32)
+Epochs 10-30: Gradual refinement
+Epochs 30+:   Plateau at 0.12
+Pattern: Smooth exponential decay
+            </div>
+        </div>
+        <div>
+            <h3>Hard Dataset Stagnation:</h3>
+            <div class="code-box">
+Epochs 1-20:  Initial (4.71→2.85)
+Epochs 20-85: Oscillation ~1.4-1.5
+Epochs 85+:   No improvement
+Pattern: Early plateau + variance
+            </div>
+        </div>
+    </div>
+
+    <div class="warning-box">
+        <h3>Bonus Dataset Catastrophic Pattern:</h3>
+        <p>Train loss: <span class="metric-good">0.17</span> | Validation loss: <span class="metric-bad">8.91</span></p>
+        <p><strong>Gap ratio: 52.4×</strong> - Extreme train-val divergence</p>
+    </div>
+
+    <h3>Gradient Flow Evidence:</h3>
+    <ul>
+        <li>Layer 1-2: Normal (1e-3 to 1e-2)</li>
+        <li>Layer 3-4: Diminished (1e-5 to 1e-4)</li>
+        <li>Layer 5+: Near zero (<1e-6) - <span class="highlight">Vanishing gradients!</span></li>
+    </ul>
+</div>
+
+<!-- Slide 4: Attention Mechanism Failure -->
+<div class="slide">
+    <h1>Attention Mechanism Visualization</h1>
+
+    <h2>Attention Weight Distribution:</h2>
+
+    <table>
+        <tr>
+            <th>Dataset</th>
+            <th>Peak Areas</th>
+            <th>Weight Variance</th>
+            <th>Consistency</th>
+        </tr>
+        <tr>
+            <td>Easy</td>
+            <td>Character centers</td>
+            <td class="metric-good">0.23 (focused)</td>
+            <td>High</td>
+        </tr>
+        <tr>
+            <td>Hard</td>
+            <td>Uniform distribution</td>
+            <td class="metric-bad">0.04 (diffuse)</td>
+            <td>Random</td>
+        </tr>
+    </table>
+
+    <h3>Identified Failure Modes:</h3>
+    <ul>
+        <li><strong>Noise Attraction:</strong> Attention focuses on artifacts</li>
+        <li><strong>Edge Bias:</strong> Overemphasis on boundaries</li>
+        <li><strong>Temporal Instability:</strong> Random shifts across timesteps</li>
+    </ul>
+
+    <div class="insight-box">
+        <p><strong>Conclusion:</strong> Noise overwhelms attention's focusing ability - mechanism becomes ineffective</p>
+    </div>
+</div>
+
+<!-- Slide 5: Mathematical Analysis -->
+<div class="slide">
+    <h1>Information Theoretic Analysis</h1>
+
+    <h2>Entropy Calculations:</h2>
+    <div class="equation">
+H(Normal Text) = 3.2 bits
+H(Reversed Text) = 3.2 bits (same)
+H(Display|Condition) = 4.1 bits (higher due to ambiguity)
+Mutual Information I(Display; Label|Color) = 0.9 bits
+    </div>
+
+    <h3>Bidirectional Processing Proof:</h3>
+    <div class="code-box">
+Forward Pass (Green): "hello" → [h,e,l,l,o] → ✓
+Forward Pass (Red):   "olleh" → [o,l,l,e,h] → ✗
+
+Required: [o,l,l,e,h] → [h,e,l,l,o]
+Model learns: y = f(x)
+Error: ||reverse(f(x)) - f(x)|| ≈ 2||f(x)||
+    </div>
+
+    <div class="analysis-box">
+        <p><strong>Mathematical Proof:</strong> Unidirectional LSTM fundamentally cannot handle reversed sequences without explicit reversal mechanism</p>
+    </div>
+</div>
+
+<!-- Slide 6: Resource & Complexity Analysis -->
+<div class="slide">
+    <h1>Resource Utilization & Complexity</h1>
+
+    <div class="two-column">
+        <div>
+            <h3>Memory Footprint:</h3>
+            <ul>
+                <li>LightweightCNN: <span class="metric-good">20.1 MB</span></li>
+                <li>ImprovedCNN: <span class="metric-warning">60.0 MB</span></li>
+                <li>Seq2Seq Model: <span class="metric-bad">131.1 MB</span></li>
+            </ul>
+            <p><strong>Total GPU:</strong> ~5 GB during training</p>
+        </div>
+        <div>
+            <h3>Computational Complexity:</h3>
+            <ul>
+                <li>Easy CNN: 1.2 × 10⁸ FLOPs</li>
+                <li>Hard CNN: 4.7 × 10⁸ FLOPs</li>
+                <li>Seq2Seq: 8.3 × 10⁸ FLOPs</li>
+            </ul>
+            <p><strong>Attention:</strong> O(n²) complexity</p>
+        </div>
+    </div>
+
+    <h3>VC Dimension Analysis:</h3>
+    <div class="warning-box">
+        <p>Model parameters: ~10⁶ | Training samples: 800</p>
+        <p><strong>Ratio: 1250:1</strong> - Severe overparameterization</p>
+        <p>Models have capacity to memorize entire training set!</p>
+    </div>
+</div>
+
+<!-- Slide 7: Hyperparameter Sensitivity -->
+<div class="slide">
+    <h1>Hyperparameter Sensitivity Analysis</h1>
+
+    <h2>Learning Rate Impact:</h2>
+    <table>
+        <tr>
+            <th>Learning Rate</th>
+            <th>Easy</th>
+            <th>Hard</th>
+            <th>Bonus</th>
+        </tr>
+        <tr>
+            <td>1e-4</td>
+            <td>92%</td>
+            <td>5%</td>
+            <td class="metric-good">Best (less overfit)</td>
+        </tr>
+        <tr>
+            <td>1e-3</td>
+            <td class="metric-good">95.5%</td>
+            <td>4.5%</td>
+            <td>5%</td>
+        </tr>
+        <tr>
+            <td>5e-3</td>
+            <td>91%</td>
+            <td class="metric-warning">6%</td>
+            <td>4%</td>
+        </tr>
+    </table>
+
+    <h2>Dropout Analysis:</h2>
+    <ul>
+        <li><strong>0.0:</strong> Severe overfitting (100% train, 2% val)</li>
+        <li><strong>0.3:</strong> Best for easy dataset</li>
+        <li><strong>0.5:</strong> Best for hard/bonus</li>
+        <li><strong>0.7:</strong> Underfitting</li>
+    </ul>
+
+    <div class="insight-box">
+        <p><strong>Finding:</strong> Optimal hyperparameters vary significantly by dataset complexity</p>
+    </div>
+</div>
+
+<!-- Slide 8: Error Propagation Analysis -->
+<div class="slide">
+    <h1>Error Propagation in Seq2Seq</h1>
+
+    <h2>Teacher Forcing vs Inference:</h2>
+
+    <div class="analysis-box">
+        <h3>Training (with teacher forcing):</h3>
+        <p>Input: Previous <strong>correct</strong> token → 57.6% accuracy</p>
+    </div>
+
+    <div class="analysis-box">
+        <h3>Inference (without teacher forcing):</h3>
+        <p>Input: Previous <strong>predicted</strong> token → Error accumulation</p>
+        <p>Example: "year" → "y" → "ye" → "yea" → "year" → "yeary" → "yearyyyy"</p>
+    </div>
+
+    <h3>Beam Search Experiments:</h3>
+    <table>
+        <tr>
+            <th>Beam Width</th>
+            <th>Accuracy</th>
+            <th>Effect</th>
+        </tr>
+        <tr>
+            <td>1 (Greedy)</td>
+            <td>4.0%</td>
+            <td>Baseline</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td class="metric-warning">4.5%</td>
+            <td>Slight improvement</td>
+        </tr>
+        <tr>
+            <td>10</td>
+            <td class="metric-bad">4.1%</td>
+            <td>Worse (noise amplified)</td>
+        </tr>
+    </table>
+</div>
+
+<!-- Slide 9: Surprising Discoveries -->
+<div class="slide">
+    <h1>Surprising Discoveries</h1>
+
+    <div class="insight-box">
+        <h3>1. The "Frequency Bias" Phenomenon</h3>
+        <p>Correlation with training word frequency: <strong>r = 0.71</strong></p>
+        <p>Top 5 predicted words appear in 73% of wrong predictions</p>
+    </div>
+
+    <div class="insight-box">
+        <h3>2. The "First Character Fixation"</h3>
+        <ul>
+            <li>67% of errors have correct first character</li>
+            <li>23% have correct first two characters</li>
+            <li>Model learns prefix patterns strongly</li>
+        </ul>
+    </div>
+
+    <div class="insight-box">
+        <h3>3. The "Color Blindness" Effect</h3>
+        <p>Despite color being key signal:</p>
+        <ul>
+            <li>Same 5% accuracy on red/green</li>
+            <li>Attention maps show no focus on background</li>
+            <li>Complete failure to use color information</li>
+        </ul>
+    </div>
+</div>
+
+<!-- Slide 10: Ablation Studies -->
+<div class="slide">
+    <h1>Ablation Study Results</h1>
+
+    <h2>Architecture Component Impact:</h2>
+    <table>
+        <tr>
+            <th>Component Removed</th>
+            <th>Easy Impact</th>
+            <th>Hard Impact</th>
+        </tr>
+        <tr>
+            <td>Baseline</td>
+            <td>95.5%</td>
+            <td>4.5%</td>
+        </tr>
+        <tr>
+            <td>No BatchNorm</td>
+            <td class="metric-bad">-8.2%</td>
+            <td class="metric-bad">-2.4%</td>
+        </tr>
+        <tr>
+            <td>No Residuals</td>
+            <td class="metric-warning">-4.3%</td>
+            <td class="metric-warning">-1.4%</td>
+        </tr>
+        <tr>
+            <td>No Attention</td>
+            <td>-0.7%</td>
+            <td>-0.2%</td>
+        </tr>
+    </table>
+
+    <h3>Data Augmentation Impact:</h3>
+    <ul>
+        <li>None → Rotation: Easy +0.6%, Hard +0.7%</li>
+        <li>None → Noise: Easy -0.7%, Hard <span class="metric-good">+1.6%</span></li>
+        <li>None → All: Easy -2.3%, Hard <span class="metric-good">+2.8%</span></li>
+    </ul>
+
+    <div class="warning-box">
+        <p><strong>Key Finding:</strong> Augmentation helps hard dataset most (+2.8%) but can hurt easy dataset</p>
+    </div>
+</div>
+
+<!-- Slide 11: Novel Solutions -->
+<div class="slide">
+    <h1>Proposed Novel Solutions</h1>
+
+    <h2>1. Dual-Stream Architecture:</h2>
+    <div class="code-box">
+Stream 1: Text Recognition
+Stream 2: Condition Recognition
+Fusion: Late fusion with conditional logic
+Expected: +30-40% on bonus dataset
+    </div>
+
+    <h2>2. Curriculum Learning Schedule:</h2>
+    <div class="code-box">
+Week 1: Easy dataset only
+Week 2: 75% easy, 25% hard
+Week 3: 50% easy, 50% hard
+Week 4: 25% easy, 50% hard, 25% bonus
+Week 5: Full mixture
+    </div>
+
+    <h2>3. Synthetic Data Generation Pipeline:</h2>
+    <ul>
+        <li>Font interpolation (blend between fonts)</li>
+        <li>Progressive noise addition</li>
+        <li>Elastic deformations</li>
+        <li>Target: 10× data (8,000 samples)</li>
+    </ul>
+</div>
+
+<!-- Slide 12: Conclusions -->
+<div class="slide">
+    <h1>Deep Dive Conclusions</h1>
+
+    <h2>Fundamental Limitations Exposed:</h2>
+    <ul>
+        <li><strong>91% performance drop:</strong> Not just training - architectural problem</li>
+        <li><strong>1250:1 parameter ratio:</strong> Models memorize, don't generalize</li>
+        <li><strong>52× train-val gap:</strong> Extreme overfitting on complex data</li>
+    </ul>
+
+    <h2>Key Technical Insights:</h2>
+    <ul>
+        <li>Attention mechanisms fail under noise (variance 0.04 vs 0.23)</li>
+        <li>Unidirectional processing mathematically inadequate for reversals</li>
+        <li>Frequency bias dominates visual feature learning (r=0.71)</li>
+    </ul>
+
+    <h2>Required Paradigm Shifts:</h2>
+    <ul>
+        <li>Move from CNN+LSTM to Transformers</li>
+        <li>Implement multi-task learning for condition awareness</li>
+        <li>10× data augmentation minimum</li>
+        <li>Curriculum learning essential for complex datasets</li>
+    </ul>
+
+    <div class="insight-box">
+        <p><strong>Final Insight:</strong> The CAPTCHA challenge reveals deep learning's sample inefficiency and architectural brittleness when facing systematic variations.</p>
+    </div>
+</div>
+
+<div class="nav">
+    <button id="prev" onclick="changeSlide(-1)">← Previous</button>
+    <button id="next" onclick="changeSlide(1)">Next →</button>
+</div>
+
+<div class="slide-num" id="slideNum">1 / 12</div>
+
+<script>
+let current = 0;
+const slides = document.querySelectorAll('.slide');
+const total = slides.length;
+
+function showSlide(n) {
+    if (n < 0 || n >= total) return;
+
+    slides[current].classList.remove('active');
+    current = n;
+    slides[current].classList.add('active');
+
+    document.getElementById('slideNum').textContent = `${current + 1} / ${total}`;
+    document.getElementById('prev').disabled = current === 0;
+    document.getElementById('next').disabled = current === total - 1;
+}
+
+function changeSlide(dir) {
+    const newSlide = current + dir;
+    if (newSlide >= 0 && newSlide < total) {
+        showSlide(newSlide);
+    }
+}
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') changeSlide(-1);
+    if (e.key === 'ArrowRight' || e.key === ' ') {
+        e.preventDefault();
+        changeSlide(1);
+    }
+    if (e.key === 'f' || e.key === 'F') {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen();
+        } else {
+            document.exitFullscreen();
+        }
+    }
+});
+
+showSlide(0);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,415 @@
+{
+  "dataset": "hard",
+  "model_type": "seq2seq",
+  "num_samples": 50,
+  "exact_matches": 2,
+  "total_cer": 43.0547619047619,
+  "total_wer": 48.0,
+  "predictions": [
+    {
+      "target": "elephant",
+      "prediction": "freedom",
+      "cer": 0.875,
+      "wer": 1.0,
+      "exact_match": false
+    },
+    {
+      "target": "box",
+      "prediction": "book",
+      "cer": 0.6666666666666666,
+      "wer": 1.0,
+      "exact_match": false
+    },
+    {
+      "target": "crystal",
+      "prediction": "friend",
+      "cer": 0.8571428571428571,
+      "wer": 1.0,
+      "exact_match": false
+    },
+    {
+      "target": "year",
+      "prediction": "foot",
+      "cer": 1.0,
+      "wer": 1.0,
+      "exact_match": false
+    },
+    {
+      "target": "basketball",
+      "prediction": "celebrate",
+      "cer": 0.8,
+      "wer": 1.0,
+      "exact_match": false
+    },
+    {
+      "target": "hot",
+      "prediction": "hot",
+      "cer": 0.0,
+      "wer": 0.0,
+      "exact_match": true
+    },
+    {
+      "target": "big",
+      "prediction": "top",
+      "cer": 1.0,
+      "wer": 1.0,
+      "exact_match": false
+    },
+    {
+      "target": "hot",
+      "prediction": "hot",
+      "cer": 0.0,
+      "wer": 0.0,
+      "exact_match": true
+    },
+    {
+      "target": "keyboard",
+      "prediction": "sunshine",
+      "cer": 1.0,
+      "wer": 1.0,
+      "exact_match": false
+    },
+    {
+      "target": "home",
+      "prediction": "foot",
+      "cer": 0.75,
+      "wer": 1.0,
+      "exact_match": false
+    },
+    {
+      "target": "celebrate",
+      "prediction": "courage",
+      "cer": 0.5555555555555556,
+      "wer": 1.0,
+      "exact_match": false
+    },
+    {
+      "target": "orange",
+      "prediction": "sunshine",
+      "cer": 1.1666666666666667,
+      "wer": 1.0,
+      "exact_match": false
+    },
+    {
+      "target": "run",
+      "prediction": "home",
+      "cer": 1.3333333333333333,
+      "wer": 1.0,
+      "exact_match": false
+    },
+    {
+      "target": "run",
+      "prediction": "fish",
+      "cer": 1.3333333333333333,
+      "wer": 1.0,
+      "exact_match": false
+    },
+    {
+      "target": "courage",
+      "prediction": "summer",
+      "cer": 0.8571428571428571,
+      "wer": 1.0,
+      "exact_match": false
+    },
+    {
+      "target": "keyboard",
+      "prediction": "window",
+      "cer": 0.875,
+      "wer": 1.0,
+      "exact_match": false
+    },
+    {
+      "target": "water",
+      "prediction": "house",
+      "cer": 1.0,
+      "wer": 1.0,
+      "exact_match": false
+    },
+    {
+      "target": "autumn",
+      "prediction": "winter",
+      "cer": 1.0,
+      "wer": 1.0,
+      "exact_match": false
+    },
+    {
+      "target": "wisdom",
+      "prediction": "thunder",
+      "cer": 1.0,
+      "wer": 1.0,
+      "exact_match": false
+    },
+    {
+      "target": "happiness",
+      "prediction": "celebrate",
+      "cer": 1.0,
+      "wer": 1.0,
+      "exact_match": false
+    },
+    {
+      "target": "festival",
+      "prediction": "thunder",
+      "cer": 1.0,
+      "wer": 1.0,
+      "exact_match": false
+    },
+    {
+      "target": "tree",
+      "prediction": "foot",
+      "cer": 1.0,
+      "wer": 1.0,
+      "exact_match": false
+    },
+    {
+      "target": "door",
+      "prediction": "foot",
+      "cer": 0.5,
+      "wer": 1.0,
+      "exact_match": false
+    },
+    {
+      "target": "heart",
+      "prediction": "foot",
+      "cer": 0.8,
+      "wer": 1.0,
+      "exact_match": false
+    },
+    {
+      "target": "discovery",
+      "prediction": "freedom",
+      "cer": 1.0,
+      "wer": 1.0,
+      "exact_match": false
+    },
+    {
+      "target": "hat",
+      "prediction": "big",
+      "cer": 1.0,
+      "wer": 1.0,
+      "exact_match": false
+    },
+    {
+      "target": "music",
+      "prediction": "book",
+      "cer": 1.0,
+      "wer": 1.0,
+      "exact_match": false
+    },
+    {
+      "target": "incredible",
+      "prediction": "celebrate",
+      "cer": 0.8,
+      "wer": 1.0,
+      "exact_match": false
+    },
+    {
+      "target": "basketball",
+      "prediction": "future",
+      "cer": 0.9,
+      "wer": 1.0,
+      "exact_match": false
+    },
+    {
+      "target": "wonderful",
+      "prediction": "watermelon",
+      "cer": 0.7777777777777778,
+      "wer": 1.0,
+      "exact_match": false
+    },
+    {
+      "target": "garden",
+      "prediction": "food",
+      "cer": 0.8333333333333334,
+      "wer": 1.0,
+      "exact_match": false
+    },
+    {
+      "target": "moon",
+      "prediction": "foot",
+      "cer": 0.5,
+      "wer": 1.0,
+      "exact_match": false
+    },
+    {
+      "target": "hot",
+      "prediction": "big",
+      "cer": 1.0,
+      "wer": 1.0,
+      "exact_match": false
+    },
+    {
+      "target": "wonderful",
+      "prediction": "thunder",
+      "cer": 0.6666666666666666,
+      "wer": 1.0,
+      "exact_match": false
+    },
+    {
+      "target": "adventure",
+      "prediction": "computer",
+      "cer": 0.7777777777777778,
+      "wer": 1.0,
+      "exact_match": false
+    },
+    {
+      "target": "magical",
+      "prediction": "world",
+      "cer": 1.0,
+      "wer": 1.0,
+      "exact_match": false
+    },
+    {
+      "target": "treasure",
+      "prediction": "future",
+      "cer": 0.625,
+      "wer": 1.0,
+      "exact_match": false
+    },
+    {
+      "target": "story",
+      "prediction": "foot",
+      "cer": 0.8,
+      "wer": 1.0,
+      "exact_match": false
+    },
+    {
+      "target": "dream",
+      "prediction": "window",
+      "cer": 1.2,
+      "wer": 1.0,
+      "exact_match": false
+    },
+    {
+      "target": "box",
+      "prediction": "hot",
+      "cer": 0.6666666666666666,
+      "wer": 1.0,
+      "exact_match": false
+    },
+    {
+      "target": "year",
+      "prediction": "door",
+      "cer": 0.75,
+      "wer": 1.0,
+      "exact_match": false
+    },
+    {
+      "target": "water",
+      "prediction": "foot",
+      "cer": 1.0,
+      "wer": 1.0,
+      "exact_match": false
+    },
+    {
+      "target": "generation",
+      "prediction": "hourne",
+      "cer": 0.9,
+      "wer": 1.0,
+      "exact_match": false
+    },
+    {
+      "target": "mystery",
+      "prediction": "forest",
+      "cer": 0.8571428571428571,
+      "wer": 1.0,
+      "exact_match": false
+    },
+    {
+      "target": "universe",
+      "prediction": "courage",
+      "cer": 0.875,
+      "wer": 1.0,
+      "exact_match": false
+    },
+    {
+      "target": "pineapple",
+      "prediction": "freedom",
+      "cer": 0.8888888888888888,
+      "wer": 1.0,
+      "exact_match": false
+    },
+    {
+      "target": "helicopter",
+      "prediction": "courage",
+      "cer": 0.9,
+      "wer": 1.0,
+      "exact_match": false
+    },
+    {
+      "target": "cat",
+      "prediction": "home",
+      "cer": 1.3333333333333333,
+      "wer": 1.0,
+      "exact_match": false
+    },
+    {
+      "target": "autumn",
+      "prediction": "house",
+      "cer": 0.8333333333333334,
+      "wer": 1.0,
+      "exact_match": false
+    },
+    {
+      "target": "atmosphere",
+      "prediction": "forest",
+      "cer": 0.8,
+      "wer": 1.0,
+      "exact_match": false
+    }
+  ],
+  "errors": [
+    {
+      "target": "elephant",
+      "predicted": "freedom",
+      "cer": 0.875
+    },
+    {
+      "target": "box",
+      "predicted": "book",
+      "cer": 0.6666666666666666
+    },
+    {
+      "target": "crystal",
+      "predicted": "friend",
+      "cer": 0.8571428571428571
+    },
+    {
+      "target": "year",
+      "predicted": "foot",
+      "cer": 1.0
+    },
+    {
+      "target": "basketball",
+      "predicted": "celebrate",
+      "cer": 0.8
+    },
+    {
+      "target": "big",
+      "predicted": "top",
+      "cer": 1.0
+    },
+    {
+      "target": "keyboard",
+      "predicted": "sunshine",
+      "cer": 1.0
+    },
+    {
+      "target": "home",
+      "predicted": "foot",
+      "cer": 0.75
+    },
+    {
+      "target": "celebrate",
+      "predicted": "courage",
+      "cer": 0.5555555555555556
+    },
+    {
+      "target": "orange",
+      "predicted": "sunshine",
+      "cer": 1.1666666666666667
+    }
+  ],
+  "avg_cer": 0.8610952380952379,
+  "avg_wer": 0.96,
+  "exact_match_rate": 0.04
+}

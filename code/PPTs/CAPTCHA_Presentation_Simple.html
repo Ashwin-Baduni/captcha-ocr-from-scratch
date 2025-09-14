@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neural CAPTCHA Recognition System - PhD Presentation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f5f5f5;
+            overflow: hidden;
+        }
+
+        .slide {
+            display: none;
+            width: 100vw;
+            height: 100vh;
+            padding: 50px;
+            box-sizing: border-box;
+            background: white;
+            overflow-y: auto;
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 48px;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #4CAF50;
+            padding-bottom: 15px;
+        }
+
+        h2 {
+            color: #555;
+            font-size: 36px;
+            margin: 30px 0 20px 0;
+        }
+
+        h3 {
+            color: #666;
+            font-size: 28px;
+            margin: 25px 0 15px 0;
+        }
+
+        p {
+            font-size: 20px;
+            line-height: 1.6;
+            color: #444;
+            margin: 15px 0;
+        }
+
+        ul {
+            font-size: 20px;
+            line-height: 1.8;
+            color: #444;
+            margin: 20px 0;
+            padding-left: 40px;
+        }
+
+        li {
+            margin: 10px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+            font-size: 18px;
+        }
+
+        th {
+            background: #4CAF50;
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+
+        td {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+        }
+
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        .code {
+            background: #f4f4f4;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 20px 0;
+            font-family: monospace;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+
+        .good {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+
+        .bad {
+            color: #f44336;
+            font-weight: bold;
+        }
+
+        .highlight {
+            background: #ffeb3b;
+            padding: 3px 6px;
+            border-radius: 3px;
+        }
+
+        .nav {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+        }
+
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            margin: 0 5px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background: #45a049;
+        }
+
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .slide-num {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: #333;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 18px;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .title-slide {
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .title-slide h1 {
+            color: white;
+            font-size: 52px;
+            margin-bottom: 20px;
+            border: none;
+            padding: 0;
+        }
+
+        .box {
+            border: 2px solid #4CAF50;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            background: #f9fff9;
+        }
+
+        .alert {
+            border: 2px solid #f44336;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            background: #fff9f9;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Slide 1: Title -->
+<div class="slide active title-slide">
+    <div style="display: flex; align-items: center; justify-content: center; height: 100%;">
+        <h1>Neural CAPTCHA Recognition System</h1>
+    </div>
+</div>
+
+<!-- Slide 2: Problem Statement -->
+<div class="slide">
+    <h1>Why Neural OCR?</h1>
+
+    <h2>Classical OCR Limitations:</h2>
+    <ul>
+        <li>Handcrafted features (edge maps, stroke patterns)</li>
+        <li>Fail on font variations</li>
+        <li>Cannot handle noise or distortions</li>
+        <li>No adaptation to conditional rendering</li>
+    </ul>
+
+    <h2>Neural Approach Advantages:</h2>
+    <ul>
+        <li>Learn features automatically</li>
+        <li>Generalize across fonts</li>
+        <li>Handle noise robustly</li>
+        <li>Adapt to complex patterns</li>
+    </ul>
+</div>
+
+<!-- Slide 3: Research Objectives -->
+<div class="slide">
+    <h1>Four Core Tasks</h1>
+
+    <div class="box">
+        <h3>1. Dataset Generation</h3>
+        <p>✓ Synthesized 3,000 CAPTCHA images</p>
+        <p>✓ Three difficulty levels</p>
+    </div>
+
+    <div class="box">
+        <h3>2. Classification</h3>
+        <p>✓ 100-word vocabulary</p>
+        <p>✓ CNN architectures</p>
+    </div>
+
+    <div class="box">
+        <h3>3. Text Extraction</h3>
+        <p>✓ Variable-length OCR</p>
+        <p>✓ Seq2seq with attention</p>
+    </div>
+
+    <div class="box">
+        <h3>4. Conditional Rendering</h3>
+        <p>✓ Color-based transformations</p>
+        <p>✓ Reversed text challenge</p>
+    </div>
+</div>
+
+<!-- Slide 4: Dataset Design -->
+<div class="slide">
+    <h1>Three Complexity Levels</h1>
+
+    <table>
+        <tr>
+            <th>Dataset</th>
+            <th>Images</th>
+            <th>Characteristics</th>
+            <th>Difficulty Score</th>
+        </tr>
+        <tr>
+            <td><strong>Easy</strong></td>
+            <td>1,000</td>
+            <td>Fixed font, white background</td>
+            <td class="good">0.253</td>
+        </tr>
+        <tr>
+            <td><strong>Hard</strong></td>
+            <td>1,000</td>
+            <td>6 fonts, noise, distortions</td>
+            <td style="color: orange;">0.780</td>
+        </tr>
+        <tr>
+            <td><strong>Bonus</strong></td>
+            <td>1,000</td>
+            <td>Conditional: green=normal, red=reversed</td>
+            <td class="bad">0.869</td>
+        </tr>
+    </table>
+
+    <div class="box">
+        <h3>Key Innovation:</h3>
+        <ul>
+            <li>Quantitative difficulty scoring system</li>
+            <li>Systematic complexity progression</li>
+            <li>Complete metadata tracking for analysis</li>
+        </ul>
+    </div>
+</div>
+
+<!-- Slide 5: Easy Dataset -->
+<div class="slide">
+    <h1>Easy Dataset Examples</h1>
+    <h2>Clean, Readable CAPTCHAs</h2>
+
+    <div class="code">
+Background: White (255,255,255)
+Font: DejaVu Sans (28-32pt)
+Noise: None
+Distortion: None
+    </div>
+
+    <div class="box">
+        <h3>Performance Achieved:</h3>
+        <ul>
+            <li>Classification: <span class="good">95.5% accuracy</span></li>
+            <li>OCR: <span class="good">90.5% exact match</span></li>
+            <li>CER: <span class="good">0.041</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- Slide 6: Hard Dataset -->
+<div class="slide">
+    <h1>Hard Dataset Examples</h1>
+    <h2>Complex, Noisy CAPTCHAs</h2>
+
+    <div class="code">
+Backgrounds: Variable (200-255 RGB)
+Fonts: 6 families (DejaVu, Liberation)
+Noise: Gaussian (σ=0.02), Salt-pepper
+Distortions: Rotation ±5°, Shear ±0.2
+    </div>
+
+    <div class="alert">
+        <h3>Performance Achieved:</h3>
+        <ul>
+            <li>Classification: <span class="bad">4.5% accuracy</span></li>
+            <li>OCR: <span class="bad">4% exact match</span></li>
+            <li>CER: <span class="bad">0.846</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- Slide 7: Bonus Dataset -->
+<div class="slide">
+    <h1>Conditional Rendering Challenge</h1>
+
+    <div class="box">
+        <h3>The Rule:</h3>
+        <ul>
+            <li><strong>Green Background</strong>: Display text normally</li>
+            <li><strong>Red Background</strong>: Display text reversed</li>
+            <li><strong>Critical</strong>: Label remains unchanged!</li>
+        </ul>
+    </div>
+
+    <h3>Example:</h3>
+    <table>
+        <tr>
+            <th>Background</th>
+            <th>Display</th>
+            <th>Label</th>
+        </tr>
+        <tr>
+            <td>Green</td>
+            <td>"hello"</td>
+            <td>"hello"</td>
+        </tr>
+        <tr>
+            <td>Red</td>
+            <td>"olleh"</td>
+            <td>"hello"</td>
+        </tr>
+    </table>
+
+    <p style="font-size: 24px; text-align: center;">
+        <strong>Performance:</strong> <span class="bad">11% exact match</span>
+    </p>
+</div>
+
+<!-- Slide 8: CNN Architecture -->
+<div class="slide">
+    <h1>Architecture - Classification</h1>
+    <h2>CNN Design Choices</h2>
+
+    <h3>LightweightCNN (Easy Dataset):</h3>
+    <div class="code">
+Conv(3→32) → Conv(32→64) → Conv(64→128)
+AdaptivePool → FC(512) → FC(256) → FC(100)
+    </div>
+
+    <h3>ImprovedCNN (Hard/Bonus):</h3>
+    <div class="code">
+ResBlock(64→128) → ResBlock(128→256) → ResBlock(256→512)
+SpatialAttention → GlobalPool → Classifier
+    </div>
+
+    <div class="box">
+        <p><strong>Key Innovation:</strong> Residual connections + Spatial attention mechanism</p>
+    </div>
+</div>
+
+<!-- Slide 9: Seq2Seq Architecture -->
+<div class="slide">
+    <h1>Architecture - Text Extraction</h1>
+    <h2>Sequence-to-Sequence Model</h2>
+
+    <h3>Encoder (CNN):</h3>
+    <div class="code">
+Conv1(3→64) → Pool
+Conv2(64→128) → Pool
+Conv3(128→256)
+Conv4(256→512)
+AdaptivePool(4,16)
+    </div>
+
+    <h3>Decoder (LSTM + Attention):</h3>
+    <div class="code">
+Embedding(vocab→256)
+LSTM(256+context→512)
+Attention(Bahdanau)
+Output(512→vocab)
+    </div>
+</div>
+
+<!-- Slide 10: Training Strategy -->
+<div class="slide">
+    <h1>Training Strategy</h1>
+    <h2>Hyperparameter Selection</h2>
+
+    <table>
+        <tr>
+            <th>Parameter</th>
+            <th>Value</th>
+            <th>Justification</th>
+        </tr>
+        <tr>
+            <td>Learning Rate</td>
+            <td>1e-3</td>
+            <td>Standard for Adam optimizer</td>
+        </tr>
+        <tr>
+            <td>Batch Size</td>
+            <td>32</td>
+            <td>Memory/stability balance</td>
+        </tr>
+        <tr>
+            <td>Optimizer</td>
+            <td>Adam</td>
+            <td>Adaptive learning rates</td>
+        </tr>
+        <tr>
+            <td>Scheduler</td>
+            <td>ReduceLROnPlateau</td>
+            <td>Automatic adjustment</td>
+        </tr>
+        <tr>
+            <td>Dropout</td>
+            <td>0.3-0.5</td>
+            <td>Based on dataset complexity</td>
+        </tr>
+    </table>
+
+    <p style="text-align: center; font-size: 24px; margin-top: 30px;">
+        <strong>Total Training Time:</strong> ~8 hours on single GPU
+    </p>
+</div>
+
+<!-- Slide 11: Results Overview -->
+<div class="slide">
+    <h1>Performance Across Tasks</h1>
+
+    <h2>Classification (100-word vocabulary):</h2>
+    <table>
+        <tr>
+            <th>Dataset</th>
+            <th>Accuracy</th>
+            <th>Training Time</th>
+        </tr>
+        <tr>
+            <td>Easy</td>
+            <td class="good">95.5%</td>
+            <td>10s</td>
+        </tr>
+        <tr>
+            <td>Hard</td>
+            <td class="bad">4.5%</td>
+            <td>169s</td>
+        </tr>
+        <tr>
+            <td>Bonus</td>
+            <td class="bad">5.0%</td>
+            <td>170s</td>
+        </tr>
+    </table>
+
+    <h2>Text Extraction (OCR):</h2>
+    <table>
+        <tr>
+            <th>Dataset</th>
+            <th>Exact Match</th>
+            <th>CER</th>
+            <th>WER</th>
+        </tr>
+        <tr>
+            <td>Easy</td>
+            <td class="good">90.5%</td>
+            <td class="good">0.041</td>
+            <td class="good">0.095</td>
+        </tr>
+        <tr>
+            <td>Hard</td>
+            <td class="bad">4.0%</td>
+            <td class="bad">0.846</td>
+            <td class="bad">0.960</td>
+        </tr>
+        <tr>
+            <td>Bonus</td>
+            <td class="bad">11.0%</td>
+            <td class="bad">0.788</td>
+            <td class="bad">0.890</td>
+        </tr>
+    </table>
+</div>
+
+<!-- Slide 12: Key Finding 1 -->
+<div class="slide">
+    <h1>Key Finding #1</h1>
+    <h2>Complexity Barrier</h2>
+
+    <div class="alert">
+        <h3>Performance Degradation:</h3>
+        <ul>
+            <li>Easy → Hard: <span class="highlight">91% accuracy drop</span></li>
+            <li>Linear complexity increase → Exponential performance decrease</li>
+        </ul>
+    </div>
+
+    <h3>Evidence:</h3>
+    <div class="code">
+Easy:  Train=91%, Val=95%  (No overfitting)
+Hard:  Train=66%, Val=4.5% (Severe overfitting)
+Bonus: Train=97%, Val=5%   (Extreme overfitting)
+    </div>
+
+    <div class="box">
+        <p><strong>Insight:</strong> Current architectures fail to extract invariant features</p>
+    </div>
+</div>
+
+<!-- Slide 13: Key Finding 2 -->
+<div class="slide">
+    <h1>Key Finding #2</h1>
+    <h2>Attention Mechanism Failure</h2>
+
+    <div class="box">
+        <h3>Observation:</h3>
+        <p>Attention weights remain <strong>uniform</strong> across image regions</p>
+    </div>
+
+    <h3>Hypothesis:</h3>
+    <p>Noise overwhelms attention's focusing ability</p>
+
+    <h3>Evidence:</h3>
+    <ul>
+        <li>No performance improvement with attention on hard dataset</li>
+        <li>Attention maps show no meaningful patterns</li>
+        <li>Model defaults to global features</li>
+    </ul>
+
+    <div class="alert">
+        <p><strong>Implication:</strong> Need noise-robust attention mechanisms</p>
+    </div>
+</div>
+
+<!-- Slide 14: Key Finding 3 -->
+<div class="slide">
+    <h1>Key Finding #3</h1>
+    <h2>Conditional Rendering Challenge</h2>
+
+    <div class="box">
+        <h3>Bidirectional Processing Required</h3>
+    </div>
+
+    <h3>Current Limitation:</h3>
+    <ul>
+        <li>Unidirectional LSTM: left-to-right processing</li>
+        <li>Reversed text: requires right-to-left understanding</li>
+    </ul>
+
+    <h3>Performance Gap:</h3>
+    <ul>
+        <li>Green (normal): <span style="color: orange;">18% exact match</span></li>
+        <li>Red (reversed): <span class="bad">4% exact match</span></li>
+    </ul>
+
+    <p style="text-align: center; font-size: 24px; margin-top: 30px;">
+        <strong>Solution:</strong> Bidirectional LSTM or Transformer architectures
+    </p>
+</div>
+
+<!-- Slide 15: Failure Analysis -->
+<div class="slide">
+    <h1>Why Models Struggle</h1>
+
+    <div class="alert">
+        <h3>1. Overfitting (Hard/Bonus)</h3>
+        <p>Train: 97.75%, Val: 5%</p>
+        <p>Memorization vs. generalization</p>
+    </div>
+
+    <div class="alert">
+        <h3>2. Feature Extraction</h3>
+        <p>6 fonts too diverse for CNN</p>
+        <p>Loss plateaus at epoch 85</p>
+    </div>
+
+    <div class="alert">
+        <h3>3. Sample Inefficiency</h3>
+        <p>800 training samples insufficient</p>
+        <p>High-dimensional feature space</p>
+    </div>
+
+    <div class="alert">
+        <h3>4. Architecture Mismatch</h3>
+        <p>CNN+LSTM inadequate for conditional logic</p>
+        <p>Need specialized architectures</p>
+    </div>
+</div>
+
+<!-- Slide 16: Creative Insights -->
+<div class="slide">
+    <h1>Surprising Discoveries</h1>
+
+    <div class="box">
+        <h3>1. Easy CAPTCHAs are Broken</h3>
+        <p>95.5% accuracy with simple CNN</p>
+        <p>→ Modern CAPTCHAs must use complexity</p>
+    </div>
+
+    <div class="box">
+        <h3>2. Training Dynamics Anomaly</h3>
+        <p>Catastrophic forgetting in bonus dataset</p>
+        <p>Model alternates between patterns</p>
+    </div>
+
+    <div class="box">
+        <h3>3. Error Patterns</h3>
+        <p>Model defaults to high-frequency words</p>
+        <p>"elephant" → "freedom" (semantic bias)</p>
+    </div>
+</div>
+
+<!-- Slide 17: Proposed Improvements -->
+<div class="slide">
+    <h1>Evidence-Based Solutions</h1>
+
+    <div class="box">
+        <h3>1. Curriculum Learning</h3>
+        <ul>
+            <li>Start with easy samples</li>
+            <li>Gradually increase difficulty</li>
+            <li>Expected: 20-30% improvement</li>
+        </ul>
+    </div>
+
+    <div class="box">
+        <h3>2. Multi-Task Learning</h3>
+        <ul>
+            <li>Auxiliary task: predict background color</li>
+            <li>Helps with conditional logic</li>
+        </ul>
+    </div>
+
+    <div class="box">
+        <h3>3. Transformer Architecture</h3>
+        <ul>
+            <li>Better at long-range dependencies</li>
+            <li>Bidirectional by design</li>
+        </ul>
+    </div>
+
+    <div class="box">
+        <h3>4. Data Augmentation</h3>
+        <ul>
+            <li>Generate more training samples</li>
+            <li>Online augmentation during training</li>
+        </ul>
+    </div>
+</div>
+
+<!-- Slide 18: Resource Optimization -->
+<div class="slide">
+    <h1>Resource Optimization</h1>
+    <h2>Efficiency Strategies Implemented</h2>
+
+    <h3>Computational:</h3>
+    <ul>
+        <li>Adaptive pooling (reduces dimensions)</li>
+        <li>Batch normalization (faster convergence)</li>
+        <li>Early stopping criteria</li>
+    </ul>
+
+    <h3>Memory:</h3>
+    <ul>
+        <li>Dynamic vocabulary loading</li>
+        <li>Gradient accumulation</li>
+        <li>Efficient data loaders</li>
+    </ul>
+
+    <div class="box">
+        <p style="text-align: center; font-size: 24px;">
+            <strong>Result:</strong> Complete pipeline runs on single GPU in ~8 hours
+        </p>
+    </div>
+</div>
+
+<!-- Slide 19: Theoretical Contributions -->
+<div class="slide">
+    <h1>Theoretical Understanding</h1>
+
+    <h3>Architecture Justification:</h3>
+    <ul>
+        <li><strong>CNN</strong>: Exploits spatial locality in images</li>
+        <li><strong>LSTM</strong>: Handles sequential dependencies in text</li>
+        <li><strong>Attention</strong>: Focuses on relevant regions (theory vs. practice gap)</li>
+        <li><strong>Residuals</strong>: Maintains gradient flow in deep networks</li>
+    </ul>
+
+    <h3>Loss Function Analysis:</h3>
+    <ul>
+        <li>CrossEntropy vs. CTC trade-offs documented</li>
+        <li>Teacher forcing implications analyzed</li>
+    </ul>
+
+    <h3>Hyperparameter Impact:</h3>
+    <ul>
+        <li>Dropout correlation with dataset complexity (0.3→0.5)</li>
+        <li>Learning rate scheduling effectiveness measured</li>
+    </ul>
+</div>
+
+<!-- Slide 20: Conclusions -->
+<div class="slide">
+    <h1>Key Takeaways</h1>
+
+    <div class="box">
+        <h3>✓ Achievements</h3>
+        <ul>
+            <li>Complete CAPTCHA pipeline implementation</li>
+            <li>95.5% accuracy on simple CAPTCHAs</li>
+            <li>Comprehensive failure analysis</li>
+            <li>Novel conditional rendering dataset</li>
+        </ul>
+    </div>
+
+    <div class="box">
+        <h3>📊 Insights</h3>
+        <ul>
+            <li>91% complexity barrier identified</li>
+            <li>Attention mechanisms need noise robustness</li>
+            <li>Conditional logic requires specialized architectures</li>
+        </ul>
+    </div>
+
+    <div class="box">
+        <h3>🔬 Research Value</h3>
+        <ul>
+            <li>Benchmark for CAPTCHA difficulty</li>
+            <li>Evidence of neural OCR limitations</li>
+            <li>Actionable improvement strategies</li>
+        </ul>
+    </div>
+</div>
+
+<!-- Slide 21: Thank You -->
+<div class="slide">
+    <div class="center" style="margin-top: 150px;">
+        <h1 style="font-size: 60px; border: none;">Thank You</h1>
+        <h2>Questions & Discussion</h2>
+
+        <div style="margin-top: 50px; text-align: left; display: inline-block;">
+            <p><strong>Repository:</strong> Available with all code and results</p>
+            <p><strong>Key Metrics:</strong></p>
+            <ul>
+                <li>3,000 images generated</li>
+                <li>6 models trained</li>
+                <li>8 hours total training</li>
+                <li>95.5% best accuracy</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="nav">
+    <button id="prev" onclick="changeSlide(-1)">Previous</button>
+    <button id="next" onclick="changeSlide(1)">Next</button>
+</div>
+
+<div class="slide-num" id="slideNum">1 / 21</div>
+
+<script>
+let current = 0;
+const slides = document.querySelectorAll('.slide');
+const total = slides.length;
+
+function showSlide(n) {
+    slides[current].classList.remove('active');
+    current = (n + total) % total;
+    slides[current].classList.add('active');
+
+    document.getElementById('slideNum').textContent = `${current + 1} / ${total}`;
+    document.getElementById('prev').disabled = current === 0;
+    document.getElementById('next').disabled = current === total - 1;
+}
+
+function changeSlide(dir) {
+    if ((dir === -1 && current > 0) || (dir === 1 && current < total - 1)) {
+        showSlide(current + dir);
+    }
+}
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') changeSlide(-1);
+    if (e.key === 'ArrowRight' || e.key === ' ') {
+        e.preventDefault();
+        changeSlide(1);
+    }
+});
+
+// Initialize
+showSlide(0);
+</script>
+
+</body>
+</html>

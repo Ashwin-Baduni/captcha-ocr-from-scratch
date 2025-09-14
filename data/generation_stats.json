@@ -1,0 +1,45 @@
+{
+  "generation_date": "2025-09-13T20:09:03.486090",
+  "total_generation_time": 805.291515827179,
+  "total_images": 3000,
+  "seed": 42,
+  "dataset_stats": {
+    "easy": {
+      "dataset_type": "easy",
+      "total_images": 1000,
+      "average_word_length": 6.164,
+      "min_word_length": 3,
+      "max_word_length": 10,
+      "average_generation_time": 0.004010805606842041,
+      "average_difficulty": 0.2533768487557944,
+      "min_difficulty": 0.22567357411059608,
+      "max_difficulty": 0.2760719773221682
+    },
+    "hard": {
+      "dataset_type": "hard",
+      "total_images": 1000,
+      "average_word_length": 6.164,
+      "min_word_length": 3,
+      "max_word_length": 10,
+      "average_generation_time": 0.3984377384185791,
+      "average_difficulty": 0.77974,
+      "min_difficulty": 0.63,
+      "max_difficulty": 0.99
+    },
+    "bonus": {
+      "dataset_type": "bonus",
+      "total_images": 1000,
+      "average_word_length": 6.164,
+      "min_word_length": 3,
+      "max_word_length": 10,
+      "average_generation_time": 0.40253581190109256,
+      "average_difficulty": 0.8694701335370371,
+      "min_difficulty": 0.68,
+      "max_difficulty": 1.0,
+      "condition_distribution": {
+        "green": 500,
+        "red": 500
+      }
+    }
+  }
+}

@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLIP: Learning Transferable Visual Models From Natural Language Supervision</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #1a1a1a;
+            overflow: hidden;
+            color: #333;
+        }
+
+        .slide {
+            display: none;
+            width: 100vw;
+            height: 100vh;
+            padding: 60px 80px;
+            box-sizing: border-box;
+            background: white;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        h1 {
+            color: #2563eb;
+            font-size: 42px;
+            margin-bottom: 30px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        h2 {
+            color: #1e40af;
+            font-size: 32px;
+            margin: 20px 0;
+            font-weight: 600;
+        }
+
+        h3 {
+            color: #3730a3;
+            font-size: 26px;
+            margin: 20px 0 15px 0;
+            font-weight: 500;
+        }
+
+        p {
+            font-size: 22px;
+            line-height: 1.6;
+            color: #374151;
+            margin: 15px 0;
+        }
+
+        ul {
+            font-size: 22px;
+            line-height: 1.8;
+            color: #374151;
+            margin: 20px 0;
+            padding-left: 30px;
+        }
+
+        li {
+            margin: 12px 0;
+        }
+
+        .title-slide {
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .title-slide h1 {
+            color: white;
+            font-size: 52px;
+            margin-bottom: 20px;
+        }
+
+        .title-slide h2 {
+            color: rgba(255,255,255,0.9);
+            font-size: 28px;
+            font-weight: 400;
+        }
+
+        .title-slide p {
+            color: rgba(255,255,255,0.8);
+            font-size: 20px;
+            margin-top: 40px;
+        }
+
+        .code-box {
+            background: #f3f4f6;
+            border-left: 4px solid #2563eb;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
+            border-radius: 4px;
+        }
+
+        .highlight-box {
+            background: #dbeafe;
+            border: 2px solid #2563eb;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .warning-box {
+            background: #fef2f2;
+            border: 2px solid #dc2626;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .success-box {
+            background: #f0fdf4;
+            border: 2px solid #16a34a;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .metric {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            margin: 0 5px;
+        }
+
+        .metric-good {
+            background: #16a34a;
+            color: white;
+        }
+
+        .metric-bad {
+            background: #dc2626;
+            color: white;
+        }
+
+        .architecture-diagram {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 40px 0;
+            padding: 30px;
+            background: #f9fafb;
+            border-radius: 8px;
+        }
+
+        .component {
+            text-align: center;
+            padding: 20px;
+            background: white;
+            border: 2px solid #2563eb;
+            border-radius: 8px;
+            min-width: 150px;
+        }
+
+        .arrow {
+            font-size: 30px;
+            color: #2563eb;
+            margin: 0 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+            font-size: 20px;
+        }
+
+        th {
+            background: #2563eb;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+
+        td {
+            padding: 10px 12px;
+            border: 1px solid #e5e7eb;
+        }
+
+        tr:nth-child(even) {
+            background: #f9fafb;
+        }
+
+        .nav {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        button {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 6px;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #1e40af;
+        }
+
+        button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .slide-num {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 16px;
+        }
+
+        .timing {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+
+        .citation {
+            font-size: 14px;
+            color: #6b7280;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .equation {
+            background: #f9fafb;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            margin: 20px 0;
+            font-size: 20px;
+        }
+
+        .small-text {
+            font-size: 16px;
+            color: #6b7280;
+        }
+
+        strong {
+            color: #1e293b;
+        }
+
+        .reference-list {
+            font-size: 18px;
+            line-height: 1.8;
+        }
+
+        .reference-list li {
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Slide 1: Title (0:25) -->
+<div class="slide active title-slide">
+    <h1>CLIP: Learning Transferable Visual Models From Natural Language Supervision</h1>
+</div>
+
+<!-- Slide 2: Motivation & Problem (0:35) -->
+<div class="slide">
+    <h1>Motivation & Problem</h1>
+
+    <ul>
+        <li><strong>Supervised CV limitation:</strong> Fixed label sets → poor transfer & costly labels</li>
+        <li><strong>Key idea:</strong> Use natural language as "universal label space"</li>
+        <li><strong>Solution:</strong> Train on web image-text pairs at scale; evaluate via zero-shot on many datasets</li>
+    </ul>
+
+    <div class="highlight-box">
+        <p><strong>Core Innovation:</strong> Replace hand-labeled categories with language. Learn from captions at scale and evaluate via zero-shot across >30 datasets, reframing transfer as prompting rather than fine-tuning.</p>
+    </div>
+
+    <p class="citation">[Radford et al., 2021, arXiv:2103.00020]</p>
+</div>
+
+<!-- Slide 3: Architecture (0:40) -->
+<div class="slide">
+    <h1>Architecture at a Glance</h1>
+
+    <div class="architecture-diagram">
+        <div class="component">
+            <h3>Image Encoder</h3>
+            <p>ResNet/ViT</p>
+            <p>↓</p>
+            <p>Image Vector</p>
+        </div>
+        <span class="arrow">→</span>
+        <div class="component">
+            <h3>Cosine Similarity</h3>
+            <p>Normalized Space</p>
+        </div>
+        <span class="arrow">←</span>
+        <div class="component">
+            <h3>Text Encoder</h3>
+            <p>Transformer</p>
+            <p>↓</p>
+            <p>Text Vector</p>
+        </div>
+    </div>
+
+    <ul>
+        <li>Dual encoders project image & text into shared, normalized embedding space</li>
+        <li>Contrastive loss over batch-wise image×text pairs (InfoNCE-style)</li>
+        <li>Learnable temperature τ scales logits; large batches for many negatives</li>
+    </ul>
+
+    <div class="equation">
+        Loss = -log(exp(sim(I,T+)/τ) / Σexp(sim(I,T)/τ))
+    </div>
+
+    <p class="citation">[Zero-shot mechanism p.5 §3.1.2; training details p.4]</p>
+</div>
+
+<!-- Slide 4: Training Recipe & Scale (0:35) -->
+<div class="slide">
+    <h1>Training Recipe & Scale</h1>
+
+    <table>
+        <tr>
+            <th>Component</th>
+            <th>Details</th>
+        </tr>
+        <tr>
+            <td><strong>Data</strong></td>
+            <td>~400M (image, text) pairs scraped from internet</td>
+        </tr>
+        <tr>
+            <td><strong>Models</strong></td>
+            <td>5 ResNets (RN50→RN50×64) & 3 ViTs (ViT-B/32→ViT-L/14@336px)</td>
+        </tr>
+        <tr>
+            <td><strong>Training</strong></td>
+            <td>Batch size 32,768; mixed precision; gradient checkpointing</td>
+        </tr>
+    </table>
+
+    <div class="highlight-box">
+        <p><strong>Key Finding:</strong> Scaling both data and model size drives smooth performance gains. The best model (ViT-L/14@336px) becomes the default 'CLIP' in results.</p>
+    </div>
+
+    <p class="citation">[Radford et al., 2021, Table 1]</p>
+</div>
+
+<!-- Slide 5: Zero-Shot Classification (0:40) -->
+<div class="slide">
+    <h1>Zero-Shot Classification Mechanism</h1>
+
+    <div class="code-box">
+        <p>1. Encode class names with text encoder → class prototypes</p>
+        <p>2. Encode test image with image encoder → image embedding</p>
+        <p>3. Compute cosine similarity with all class prototypes</p>
+        <p>4. Apply softmax → predicted class = argmax</p>
+    </div>
+
+    <h3>Prompt Engineering Matters:</h3>
+    <ul>
+        <li>Template: "a photo of a {label}" improves accuracy</li>
+        <li>Context helps disambiguation: "a photo of a boxer, a type of dog"</li>
+        <li>Ensemble multiple prompts for robustness</li>
+    </ul>
+
+    <div class="success-box">
+        <p><strong>Innovation:</strong> Text encoder acts as a hypernetwork that supplies classifier weights on-the-fly</p>
+    </div>
+
+    <p class="citation">[Zero-shot use & prompt design p.5-7]</p>
+</div>
+
+<!-- Slide 6: Headline Results (0:40) -->
+<div class="slide">
+    <h1>Headline Results</h1>
+
+    <div class="success-box">
+        <h2>ImageNet Zero-Shot Performance</h2>
+        <p><span class="metric metric-good">76.2%</span> Top-1 Accuracy</p>
+        <p><span class="metric metric-good">95%</span> Top-5 Accuracy</p>
+        <p><strong>Matches ResNet-50 supervised performance without using 1.28M labels!</strong></p>
+    </div>
+
+    <h3>Cross-Domain Transfer:</h3>
+    <ul>
+        <li>Evaluated on 30+ diverse datasets</li>
+        <li>Strong performance on natural image tasks</li>
+        <li>More robust to distribution shift than supervised baselines</li>
+    </ul>
+
+    <div class="highlight-box">
+        <p><strong>Why it matters:</strong> Competitive ImageNet accuracy without training on ImageNet + consistent zero-shot performance across many tasks = evidence of broadly useful representations</p>
+    </div>
+
+    <p class="citation">[p.5-6 for 76.2%/95%; abstract/§3 for 30+ datasets]</p>
+</div>
+
+<!-- Slide 7: Limitations & Responsible AI (0:50) -->
+<div class="slide">
+    <h1>Limitations, Risks & Responsible AI</h1>
+
+    <div class="two-column">
+        <div>
+            <h3>Technical Limitations:</h3>
+            <ul>
+                <li>Prompt sensitivity affects accuracy</li>
+                <li>Few-shot adaptation sometimes underwhelms</li>
+                <li>Global embeddings miss fine details</li>
+            </ul>
+        </div>
+        <div>
+            <h3>Safety Concerns:</h3>
+            <ul>
+                <li>Biases from web data (stereotypes)</li>
+                <li>Typographic attacks exploit text reading</li>
+                <li>Harmful associations learned</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="warning-box">
+        <h3>Typographic Attack Example:</h3>
+        <p>Placing "iPod" text on an apple image → CLIP classifies as iPod with high confidence</p>
+        <p class="small-text">[OpenAI Multimodal Neurons blog, 2021]</p>
+    </div>
+
+    <h3>Proposed Mitigations:</h3>
+    <ul>
+        <li>Dataset filtering & bias audits on deployment data</li>
+        <li>Prompt sets with counterfactuals</li>
+        <li>Guarded label spaces & refusal policies for sensitive attributes</li>
+    </ul>
+
+    <p class="citation">[§7 Broader Impacts; OpenAI blog on typographic attacks]</p>
+</div>
+
+<!-- Slide 8: Future Directions (0:35) -->
+<div class="slide">
+    <h1>What I'd Do Next</h1>
+
+    <div class="highlight-box">
+        <h3>1. Few-Shot Adapters / Prompt-Tuning</h3>
+        <p>Enable stable small-data transfer without full fine-tuning</p>
+    </div>
+
+    <div class="highlight-box">
+        <h3>2. Region-Word Alignment</h3>
+        <p>Token-patch attention for fine-grained localization and grounding</p>
+    </div>
+
+    <div class="highlight-box">
+        <h3>3. Bias Probes & Score Calibration</h3>
+        <p>Systematic safety evaluations for deployment in sensitive domains</p>
+    </div>
+
+    <p><strong>Goal:</strong> Make CLIP more usable (better adaptation), more precise (spatial grounding), and safer (principled evaluations beyond aggregate accuracy)</p>
+
+    <p class="citation">[Consistent with paper's future work discussion]</p>
+</div>
+
+<!-- Slide 9: References (0:15) -->
+<div class="slide">
+    <h1>References</h1>
+
+    <ul class="reference-list">
+        <li><strong>Radford, A. et al. (2021).</strong> Learning Transferable Visual Models From Natural Language Supervision. <em>arXiv:2103.00020 / PMLR v139.</em></li>
+
+        <li><strong>OpenAI (2021).</strong> CLIP: Connecting text and images. <em>OpenAI Blog.</em> Available at: https://openai.com/blog/clip/</li>
+
+        <li><strong>OpenAI (2021).</strong> Multimodal Neurons in Artificial Neural Networks. <em>OpenAI Blog.</em> (Typographic attacks analysis)</li>
+
+        <li><strong>Additional Reading:</strong> ALIGN (Google), FILIP, CoOp (prompt learning extensions)</li>
+    </ul>
+
+    <div class="highlight-box">
+        <p><strong>Key Takeaway:</strong> CLIP demonstrates that natural language supervision at scale enables powerful zero-shot visual recognition, but requires careful consideration of biases and adversarial vulnerabilities.</p>
+    </div>
+</div>
+
+<div class="nav">
+    <button id="prev" onclick="changeSlide(-1)">← Previous</button>
+    <button id="next" onclick="changeSlide(1)">Next →</button>
+</div>
+
+<div class="slide-num" id="slideNum">1 / 9</div>
+<div class="timing" id="timing">0:25</div>
+
+<script>
+let current = 0;
+const slides = document.querySelectorAll('.slide');
+const total = slides.length;
+
+// Timing for each slide in seconds
+const timings = ['0:25', '0:35', '0:40', '0:35', '0:40', '0:40', '0:50', '0:35', '0:15'];
+
+function showSlide(n) {
+    if (n < 0 || n >= total) return;
+
+    slides[current].classList.remove('active');
+    current = n;
+    slides[current].classList.add('active');
+
+    document.getElementById('slideNum').textContent = `${current + 1} / ${total}`;
+    document.getElementById('timing').textContent = timings[current];
+
+    document.getElementById('prev').disabled = current === 0;
+    document.getElementById('next').disabled = current === total - 1;
+}
+
+function changeSlide(dir) {
+    const newSlide = current + dir;
+    if (newSlide >= 0 && newSlide < total) {
+        showSlide(newSlide);
+    }
+}
+
+// Keyboard navigation
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') changeSlide(-1);
+    if (e.key === 'ArrowRight' || e.key === ' ') {
+        e.preventDefault();
+        changeSlide(1);
+    }
+    if (e.key === 'f' || e.key === 'F') {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen();
+        } else {
+            document.exitFullscreen();
+        }
+    }
+});
+
+// Initialize
+showSlide(0);
+
+// Speaking notes for presenter (can be accessed via console)
+const speakerNotes = {
+    1: "Today I'll explain CLIP—how a dual-encoder trained contrastively on 400M image-text pairs learns a shared vision-language space enabling zero-shot classification. I'll cover the core idea, training recipe, zero-shot mechanism, headline results, and responsible-AI caveats, plus where I'd extend this work.",
+
+    2: "CLIP replaces hand-labeled categories with language. It learns from captions at scale and evaluates via zero-shot across >30 datasets, not just ImageNet. This reframes 'transfer' as prompting rather than fine-tuning.",
+
+    3: "Each batch forms an N×N similarity matrix; cross-entropy pushes matched pairs together and the rest apart. Normalization plus tau stabilize learning and enable clean cosine-based retrieval and classification.",
+
+    4: "Scaling both data and model size drives smooth gains. The best model ViT-L/14 at 336px is the default 'CLIP' in results.",
+
+    5: "Text acts as a hypernetwork that supplies classifier weights. Prompt templates and light ensembling boost accuracy.",
+
+    6: "This is the 'why it matters': competitive ImageNet without training on ImageNet, and consistent zero-shot performance across many tasks—evidence of broadly useful representations.",
+
+    7: "CLIP inherits internet biases and can be misled by text written on objects. Using it as-is for sensitive attributes is risky. Mitigations: dataset filtering, bias audits on task-specific data, prompt sets with counterfactuals, guarded label spaces, and refusal policies.",
+
+    8: "These directions make CLIP more usable: better adaptation, spatial grounding, and principled safety evaluations beyond aggregate accuracy.",
+
+    9: "I'm citing the paper and OpenAI's analysis of multimodal neurons and typographic attacks. Thank you for your attention."
+};
+
+// Log speaker notes for reference
+console.log("Speaker notes available in 'speakerNotes' object");
+</script>
+
+</body>
+</html>

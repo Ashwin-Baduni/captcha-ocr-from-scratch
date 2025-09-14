@@ -1,0 +1,13 @@
+{
+  "model_type": "seq2seq",
+  "dataset": "bonus",
+  "overall_metrics": {
+    "cer": 0.78771626984127,
+    "wer": 0.89,
+    "exact_match_rate": 0.11
+  },
+  "condition_specific": {},
+  "insights": [
+    "Conditional rendering (especially reversed text) significantly impacts OCR performance"
+  ]
+}

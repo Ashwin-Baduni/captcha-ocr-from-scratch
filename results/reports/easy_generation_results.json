@@ -1,0 +1,370 @@
+{
+  "dataset": "easy",
+  "model_type": "seq2seq",
+  "num_samples": 50,
+  "exact_matches": 49,
+  "total_cer": 1.0,
+  "total_wer": 1.0,
+  "predictions": [
+    {
+      "target": "elephant",
+      "prediction": "elephant",
+      "cer": 0.0,
+      "wer": 0.0,
+      "exact_match": true
+    },
+    {
+      "target": "box",
+      "prediction": "box",
+      "cer": 0.0,
+      "wer": 0.0,
+      "exact_match": true
+    },
+    {
+      "target": "crystal",
+      "prediction": "crystal",
+      "cer": 0.0,
+      "wer": 0.0,
+      "exact_match": true
+    },
+    {
+      "target": "year",
+      "prediction": "yearyyyy",
+      "cer": 1.0,
+      "wer": 1.0,
+      "exact_match": false
+    },
+    {
+      "target": "basketball",
+      "prediction": "basketball",
+      "cer": 0.0,
+      "wer": 0.0,
+      "exact_match": true
+    },
+    {
+      "target": "hot",
+      "prediction": "hot",
+      "cer": 0.0,
+      "wer": 0.0,
+      "exact_match": true
+    },
+    {
+      "target": "big",
+      "prediction": "big",
+      "cer": 0.0,
+      "wer": 0.0,
+      "exact_match": true
+    },
+    {
+      "target": "hot",
+      "prediction": "hot",
+      "cer": 0.0,
+      "wer": 0.0,
+      "exact_match": true
+    },
+    {
+      "target": "keyboard",
+      "prediction": "keyboard",
+      "cer": 0.0,
+      "wer": 0.0,
+      "exact_match": true
+    },
+    {
+      "target": "home",
+      "prediction": "home",
+      "cer": 0.0,
+      "wer": 0.0,
+      "exact_match": true
+    },
+    {
+      "target": "celebrate",
+      "prediction": "celebrate",
+      "cer": 0.0,
+      "wer": 0.0,
+      "exact_match": true
+    },
+    {
+      "target": "orange",
+      "prediction": "orange",
+      "cer": 0.0,
+      "wer": 0.0,
+      "exact_match": true
+    },
+    {
+      "target": "run",
+      "prediction": "run",
+      "cer": 0.0,
+      "wer": 0.0,
+      "exact_match": true
+    },
+    {
+      "target": "run",
+      "prediction": "run",
+      "cer": 0.0,
+      "wer": 0.0,
+      "exact_match": true
+    },
+    {
+      "target": "courage",
+      "prediction": "courage",
+      "cer": 0.0,
+      "wer": 0.0,
+      "exact_match": true
+    },
+    {
+      "target": "keyboard",
+      "prediction": "keyboard",
+      "cer": 0.0,
+      "wer": 0.0,
+      "exact_match": true
+    },
+    {
+      "target": "water",
+      "prediction": "water",
+      "cer": 0.0,
+      "wer": 0.0,
+      "exact_match": true
+    },
+    {
+      "target": "autumn",
+      "prediction": "autumn",
+      "cer": 0.0,
+      "wer": 0.0,
+      "exact_match": true
+    },
+    {
+      "target": "wisdom",
+      "prediction": "wisdom",
+      "cer": 0.0,
+      "wer": 0.0,
+      "exact_match": true
+    },
+    {
+      "target": "happiness",
+      "prediction": "happiness",
+      "cer": 0.0,
+      "wer": 0.0,
+      "exact_match": true
+    },
+    {
+      "target": "festival",
+      "prediction": "festival",
+      "cer": 0.0,
+      "wer": 0.0,
+      "exact_match": true
+    },
+    {
+      "target": "tree",
+      "prediction": "tree",
+      "cer": 0.0,
+      "wer": 0.0,
+      "exact_match": true
+    },
+    {
+      "target": "door",
+      "prediction": "door",
+      "cer": 0.0,
+      "wer": 0.0,
+      "exact_match": true
+    },
+    {
+      "target": "heart",
+      "prediction": "heart",
+      "cer": 0.0,
+      "wer": 0.0,
+      "exact_match": true
+    },
+    {
+      "target": "discovery",
+      "prediction": "discovery",
+      "cer": 0.0,
+      "wer": 0.0,
+      "exact_match": true
+    },
+    {
+      "target": "hat",
+      "prediction": "hat",
+      "cer": 0.0,
+      "wer": 0.0,
+      "exact_match": true
+    },
+    {
+      "target": "music",
+      "prediction": "music",
+      "cer": 0.0,
+      "wer": 0.0,
+      "exact_match": true
+    },
+    {
+      "target": "incredible",
+      "prediction": "incredible",
+      "cer": 0.0,
+      "wer": 0.0,
+      "exact_match": true
+    },
+    {
+      "target": "basketball",
+      "prediction": "basketball",
+      "cer": 0.0,
+      "wer": 0.0,
+      "exact_match": true
+    },
+    {
+      "target": "wonderful",
+      "prediction": "wonderful",
+      "cer": 0.0,
+      "wer": 0.0,
+      "exact_match": true
+    },
+    {
+      "target": "garden",
+      "prediction": "garden",
+      "cer": 0.0,
+      "wer": 0.0,
+      "exact_match": true
+    },
+    {
+      "target": "moon",
+      "prediction": "moon",
+      "cer": 0.0,
+      "wer": 0.0,
+      "exact_match": true
+    },
+    {
+      "target": "hot",
+      "prediction": "hot",
+      "cer": 0.0,
+      "wer": 0.0,
+      "exact_match": true
+    },
+    {
+      "target": "wonderful",
+      "prediction": "wonderful",
+      "cer": 0.0,
+      "wer": 0.0,
+      "exact_match": true
+    },
+    {
+      "target": "adventure",
+      "prediction": "adventure",
+      "cer": 0.0,
+      "wer": 0.0,
+      "exact_match": true
+    },
+    {
+      "target": "magical",
+      "prediction": "magical",
+      "cer": 0.0,
+      "wer": 0.0,
+      "exact_match": true
+    },
+    {
+      "target": "treasure",
+      "prediction": "treasure",
+      "cer": 0.0,
+      "wer": 0.0,
+      "exact_match": true
+    },
+    {
+      "target": "story",
+      "prediction": "story",
+      "cer": 0.0,
+      "wer": 0.0,
+      "exact_match": true
+    },
+    {
+      "target": "dream",
+      "prediction": "dream",
+      "cer": 0.0,
+      "wer": 0.0,
+      "exact_match": true
+    },
+    {
+      "target": "box",
+      "prediction": "box",
+      "cer": 0.0,
+      "wer": 0.0,
+      "exact_match": true
+    },
+    {
+      "target": "year",
+      "prediction": "year",
+      "cer": 0.0,
+      "wer": 0.0,
+      "exact_match": true
+    },
+    {
+      "target": "water",
+      "prediction": "water",
+      "cer": 0.0,
+      "wer": 0.0,
+      "exact_match": true
+    },
+    {
+      "target": "generation",
+      "prediction": "generation",
+      "cer": 0.0,
+      "wer": 0.0,
+      "exact_match": true
+    },
+    {
+      "target": "mystery",
+      "prediction": "mystery",
+      "cer": 0.0,
+      "wer": 0.0,
+      "exact_match": true
+    },
+    {
+      "target": "universe",
+      "prediction": "universe",
+      "cer": 0.0,
+      "wer": 0.0,
+      "exact_match": true
+    },
+    {
+      "target": "pineapple",
+      "prediction": "pineapple",
+      "cer": 0.0,
+      "wer": 0.0,
+      "exact_match": true
+    },
+    {
+      "target": "helicopter",
+      "prediction": "helicopter",
+      "cer": 0.0,
+      "wer": 0.0,
+      "exact_match": true
+    },
+    {
+      "target": "cat",
+      "prediction": "cat",
+      "cer": 0.0,
+      "wer": 0.0,
+      "exact_match": true
+    },
+    {
+      "target": "autumn",
+      "prediction": "autumn",
+      "cer": 0.0,
+      "wer": 0.0,
+      "exact_match": true
+    },
+    {
+      "target": "atmosphere",
+      "prediction": "atmosphere",
+      "cer": 0.0,
+      "wer": 0.0,
+      "exact_match": true
+    }
+  ],
+  "errors": [
+    {
+      "target": "year",
+      "predicted": "yearyyyy",
+      "cer": 1.0
+    }
+  ],
+  "avg_cer": 0.02,
+  "avg_wer": 0.02,
+  "exact_match_rate": 0.98
+}

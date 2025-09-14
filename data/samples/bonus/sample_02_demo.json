@@ -1,0 +1,30 @@
+{
+  "difficulty_score": 0.84,
+  "font_path": "/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf",
+  "font_size": 22,
+  "text_position": [
+    58,
+    19
+  ],
+  "original_text": "demo",
+  "display_text": "Demo",
+  "condition": "green",
+  "condition_rule": "normal",
+  "condition_description": "Text rendered normally",
+  "background_color": [
+    144,
+    238,
+    144
+  ],
+  "effects_applied": [
+    "condition_green",
+    "rotation",
+    "gaussian_noise",
+    "security_lines"
+  ],
+  "capitalization_pattern": "Title",
+  "transformation_applied": "No transformation (green background)",
+  "image_hash": "e89fecb80d3fe15179dd3d9871802adb",
+  "contrast_ratio": 23.199569464246288,
+  "noise_level": 240.90566049382716
+}
